@@ -10,8 +10,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/aliyun/aliyun-tablestore-go-sdk/tablestore/tsprotocol"
 	"github.com/golang/protobuf/proto"
+	"github.com/ranhuan/ots/tablestore/tsprotocol"
 )
 
 const (

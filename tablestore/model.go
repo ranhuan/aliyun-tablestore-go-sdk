@@ -1,11 +1,12 @@
 package tablestore
 
 import (
+	"math/rand"
 	"net/http"
 	"time"
+
 	"github.com/golang/protobuf/proto"
-	"github.com/aliyun/aliyun-tablestore-go-sdk/tablestore/tsprotocol"
-	"math/rand"
+	"github.com/ranhuan/ots/tablestore/tsprotocol"
 )
 
 // @class OTSClient
@@ -22,15 +23,15 @@ type (
 		accessKeySecret string
 		securityToken   string
 
-		httpClient      IHttpClient
-		config          *TableStoreConfig
-		random          *rand.Rand
+		httpClient IHttpClient
+		config     *TableStoreConfig
+		random     *rand.Rand
 	}
 	ClientOption func(*TableStoreClient)
 )
 
 type TableStoreHttpClient struct {
-	httpClient      *http.Client
+	httpClient *http.Client
 }
 
 // use this to mock http.client for testing
@@ -53,9 +54,9 @@ type HTTPTimeout struct {
 }
 
 type TableStoreConfig struct {
-	RetryTimes  uint
+	RetryTimes   uint
 	MaxRetryTime time.Duration
-	HTTPTimeout HTTPTimeout
+	HTTPTimeout  HTTPTimeout
 }
 
 type CreateTableRequest struct {
@@ -65,11 +66,9 @@ type CreateTableRequest struct {
 }
 
 type CreateTableResponse struct {
-
 }
 
 type DeleteTableResponse struct {
-
 }
 
 type TableMeta struct {
@@ -131,7 +130,7 @@ type ConsumedCapacityUnit struct {
 
 type PutRowResponse struct {
 	PrimaryKey           PrimaryKey
-Columns              []*AttributeColumn
+	Columns              []*AttributeColumn
 	ConsumedCapacityUnit *ConsumedCapacityUnit
 }
 
@@ -147,13 +146,13 @@ type PrimaryKeyType int32
 
 const (
 	PrimaryKeyType_INTEGER PrimaryKeyType = 1
-	PrimaryKeyType_STRING PrimaryKeyType = 2
-	PrimaryKeyType_BINARY PrimaryKeyType = 3
+	PrimaryKeyType_STRING  PrimaryKeyType = 2
+	PrimaryKeyType_BINARY  PrimaryKeyType = 3
 )
 
 const (
 	DefaultRetryInterval = 10
-	MaxRetryInterval = 320
+	MaxRetryInterval     = 320
 )
 
 type PrimaryKeyOption int32
@@ -166,15 +165,15 @@ const (
 )
 
 type PrimaryKeyColumn struct {
-	ColumnName string
-	Value      interface{}
+	ColumnName       string
+	Value            interface{}
 	PrimaryKeyOption PrimaryKeyOption
 }
 
 type AttributeColumn struct {
 	ColumnName string
 	Value      interface{}
-	Timestamp    int64
+	Timestamp  int64
 }
 
 type TimeRange struct {
@@ -196,20 +195,20 @@ type ColumnToUpdate struct {
 type RowExistenceExpectation int
 
 const (
-	RowExistenceExpectation_IGNORE RowExistenceExpectation = 0
-	RowExistenceExpectation_EXPECT_EXIST RowExistenceExpectation = 1
+	RowExistenceExpectation_IGNORE           RowExistenceExpectation = 0
+	RowExistenceExpectation_EXPECT_EXIST     RowExistenceExpectation = 1
 	RowExistenceExpectation_EXPECT_NOT_EXIST RowExistenceExpectation = 2
 )
 
 type ComparatorType int32
 
 const (
-	CT_EQUAL ComparatorType = 1
-	CT_NOT_EQUAL ComparatorType = 2
-	CT_GREATER_THAN ComparatorType = 3
+	CT_EQUAL         ComparatorType = 1
+	CT_NOT_EQUAL     ComparatorType = 2
+	CT_GREATER_THAN  ComparatorType = 3
 	CT_GREATER_EQUAL ComparatorType = 4
-	CT_LESS_THAN ComparatorType = 5
-	CT_LESS_EQUAL ComparatorType = 6
+	CT_LESS_THAN     ComparatorType = 5
+	CT_LESS_EQUAL    ComparatorType = 6
 )
 
 type LogicalOperator int32
@@ -217,15 +216,15 @@ type LogicalOperator int32
 const (
 	LO_NOT LogicalOperator = 1
 	LO_AND LogicalOperator = 2
-	LO_OR LogicalOperator = 3
+	LO_OR  LogicalOperator = 3
 )
 
 type FilterType int32
 
 const (
-	FT_SINGLE_COLUMN_VALUE FilterType = 1
+	FT_SINGLE_COLUMN_VALUE    FilterType = 1
 	FT_COMPOSITE_COLUMN_VALUE FilterType = 2
-	FT_COLUMN_PAGINATION FilterType = 3
+	FT_COLUMN_PAGINATION      FilterType = 3
 )
 
 type ColumnFilter interface {
@@ -376,7 +375,7 @@ type BatchGetRowRequest struct {
 }
 
 type ColumnMap struct {
-	Columns map[string][]*AttributeColumn
+	Columns    map[string][]*AttributeColumn
 	columnsKey []string
 }
 
@@ -388,18 +387,18 @@ type GetRowResponse struct {
 }
 
 type Error struct {
-	Code string
+	Code    string
 	Message string
 }
 
 type RowResult struct {
-	TableName string
-	IsSucceed bool
-	Error Error
-	PrimaryKey PrimaryKey
-	Columns    []*AttributeColumn
+	TableName            string
+	IsSucceed            bool
+	Error                Error
+	PrimaryKey           PrimaryKey
+	Columns              []*AttributeColumn
 	ConsumedCapacityUnit *ConsumedCapacityUnit
-	Index int32
+	Index                int32
 }
 
 type RowChange interface {
@@ -413,43 +412,43 @@ type BatchGetRowResponse struct {
 	TableToRowsResult map[string][]RowResult
 }
 
-type BatchWriteRowRequest struct{
+type BatchWriteRowRequest struct {
 	RowChangesGroupByTable map[string][]RowChange
 }
 
-type BatchWriteRowResponse struct{
+type BatchWriteRowResponse struct {
 	TableToRowsResult map[string][]RowResult
 }
 
 type Direction int32
 
 const (
-	FORWARD           Direction = 0
-	BACKWARD          Direction = 1
+	FORWARD  Direction = 0
+	BACKWARD Direction = 1
 )
 
-type RangeRowQueryCriteria struct{
-	TableName    string
+type RangeRowQueryCriteria struct {
+	TableName       string
 	StartPrimaryKey *PrimaryKey
-	EndPrimaryKey *PrimaryKey
-	ColumnsToGet []string
-	MaxVersion   int32
-	Filter       ColumnFilter
-	Direction    Direction
-	Limit        int32
+	EndPrimaryKey   *PrimaryKey
+	ColumnsToGet    []string
+	MaxVersion      int32
+	Filter          ColumnFilter
+	Direction       Direction
+	Limit           int32
 }
 
 type GetRangeRequest struct {
 	RangeRowQueryCriteria *RangeRowQueryCriteria
 }
 
-type Row struct{
-	PrimaryKey           *PrimaryKey
-	Columns              []*AttributeColumn
+type Row struct {
+	PrimaryKey *PrimaryKey
+	Columns    []*AttributeColumn
 }
 
 type GetRangeResponse struct {
-	Rows []*Row
+	Rows                 []*Row
 	ConsumedCapacityUnit *ConsumedCapacityUnit
-	NextStartPrimaryKey *PrimaryKey
+	NextStartPrimaryKey  *PrimaryKey
 }
